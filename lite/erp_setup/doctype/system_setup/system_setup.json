@@ -1,0 +1,248 @@
+{
+ "creation": "2020-04-10 21:53:46.296599",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "status",
+  "employees_and_users_setup",
+  "employees_attachment",
+  "column_break_4",
+  "employees_button",
+  "roles_setup",
+  "accounts_manager",
+  "hr_manager",
+  "sales_manager",
+  "buying_manager",
+  "stock_manager",
+  "column_break_11",
+  "accounts_user",
+  "hr_user",
+  "sales_user",
+  "buying_user",
+  "stock_user",
+  "items_setup",
+  "items_attachment",
+  "column_break_20",
+  "items_button",
+  "customers_setup",
+  "customers_attachment",
+  "column_break_24",
+  "customers_button",
+  "suppliers_setup",
+  "suppliers_attachment",
+  "column_break_28",
+  "suppliers_button",
+  "warehouses_setup",
+  "warehouses_attachment",
+  "column_break_32",
+  "warehouses_button"
+ ],
+ "fields": [
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Status",
+   "options": "Employees and Users Setup\nRoles Setup\nItems Setup\nCustomers Setup\nSuppliers Setup\nWarehouses Setup\nComplete",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employees_attachment",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employees_button",
+   "fieldtype": "Button",
+   "label": "Download Template"
+  },
+  {
+   "fieldname": "accounts_manager",
+   "fieldtype": "Link",
+   "label": "Accounts Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "hr_manager",
+   "fieldtype": "Link",
+   "label": "HR Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_manager",
+   "fieldtype": "Link",
+   "label": "Sales Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "buying_manager",
+   "fieldtype": "Link",
+   "label": "Buying Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "accounts_user",
+   "fieldtype": "Link",
+   "label": "Accounts User",
+   "options": "User"
+  },
+  {
+   "fieldname": "hr_user",
+   "fieldtype": "Link",
+   "label": "HR User",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_user",
+   "fieldtype": "Link",
+   "label": "Sales User",
+   "options": "User"
+  },
+  {
+   "fieldname": "buying_user",
+   "fieldtype": "Link",
+   "label": "Buying User",
+   "options": "User"
+  },
+  {
+   "fieldname": "stock_manager",
+   "fieldtype": "Link",
+   "label": "Stock Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "stock_user",
+   "fieldtype": "Link",
+   "label": "Stock User",
+   "options": "User"
+  },
+  {
+   "fieldname": "items_attachment",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "items_button",
+   "fieldtype": "Button",
+   "label": "Download Template"
+  },
+  {
+   "fieldname": "customers_attachment",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "column_break_24",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customers_button",
+   "fieldtype": "Button",
+   "label": "Download Template"
+  },
+  {
+   "fieldname": "suppliers_attachment",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "column_break_28",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "suppliers_button",
+   "fieldtype": "Button",
+   "label": "Download Template"
+  },
+  {
+   "fieldname": "warehouses_attachment",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "column_break_32",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "warehouses_button",
+   "fieldtype": "Button",
+   "label": "Download Template"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.status == 'Employees and Users Setup'",
+   "fieldname": "employees_and_users_setup",
+   "fieldtype": "Section Break",
+   "label": "EMPLOYEES AND USERS SETUP"
+  },
+  {
+   "bold": 1,
+   "collapsible_depends_on": "doc.status == 'Roles Setup'",
+   "fieldname": "roles_setup",
+   "fieldtype": "Section Break",
+   "label": "ROLES SETUP"
+  },
+  {
+   "bold": 1,
+   "collapsible_depends_on": "eval:doc.status == 'Items Setup'",
+   "fieldname": "items_setup",
+   "fieldtype": "Section Break",
+   "label": "ITEMS SETUP"
+  },
+  {
+   "bold": 1,
+   "collapsible_depends_on": "eval:doc.status == 'Customers Setup'",
+   "fieldname": "customers_setup",
+   "fieldtype": "Section Break",
+   "label": "CUSTOMERS SETUP"
+  },
+  {
+   "collapsible_depends_on": "eval:doc.status == 'Suppliers Setup'",
+   "fieldname": "suppliers_setup",
+   "fieldtype": "Section Break",
+   "label": "SUPPLIERS SETUP"
+  },
+  {
+   "bold": 1,
+   "collapsible_depends_on": "eval:doc.status == 'Warehouses Setup'",
+   "fieldname": "warehouses_setup",
+   "fieldtype": "Section Break",
+   "label": "WAREHOUSES SETUP"
+  }
+ ],
+ "hide_toolbar": 1,
+ "issingle": 1,
+ "modified": "2020-04-11 20:34:03.972621",
+ "modified_by": "Administrator",
+ "module": "ERP Setup",
+ "name": "System Setup",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
