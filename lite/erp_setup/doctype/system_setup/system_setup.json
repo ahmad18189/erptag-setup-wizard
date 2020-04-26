@@ -1,6 +1,7 @@
 {
  "creation": "2020-04-10 21:53:46.296599",
  "doctype": "DocType",
+ "document_type": "Setup",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
@@ -224,8 +225,9 @@
   }
  ],
  "hide_toolbar": 1,
+ "icon": "fa fa-star",
  "issingle": 1,
- "modified": "2020-04-11 20:34:03.972621",
+ "modified": "2020-04-26 21:56:03.513679",
  "modified_by": "Administrator",
  "module": "ERP Setup",
  "name": "System Setup",
@@ -244,5 +246,8 @@
  ],
  "quick_entry": 1,
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
 }

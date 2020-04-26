@@ -30,6 +30,20 @@ class SystemSetup(Document):
             self.status = "Customers Setup"
             self.save()
 
+        elif self.status == "Customers Setup":
+            self.setup_customers()
+            self.status = "Suppliers Setup"
+            self.save()
+
+        elif self.status == "Suppliers Setup":
+            self.setup_suppliers()
+            self.status = "Warehouses Setup"
+            self.save()
+
+        elif self.status == "Warehouses Setup":
+            self.setup_warehouses()
+            self.status = "Complete"
+            self.save()
 
     def setup_employees_and_users(self):
         if self.employees_attachment:
@@ -532,8 +546,8 @@ class SystemSetup(Document):
 
     def setup_customers(self):
 
-        if self.items_attachment:
-            file = frappe.get_doc("File", {"file_url": self.items_attachment})
+        if self.customers_attachment:
+            file = frappe.get_doc("File", {"file_url": self.customers_attachment})
             filename = file.get_full_path()
 
             company = frappe.db.get_single_value('Global Defaults', 'default_company')
@@ -552,14 +566,16 @@ class SystemSetup(Document):
                     frappe.throw(_("Only CSV and Excel files can be used to for importing data. Please check the file format you are trying to upload"))
 
                 self.delete_nongroup_customer_groups()
+                self.delete_nongroup_territories()
 
                 for index, row in enumerate(rows):
                     if index != 0:
-                        self.insert_customers_group(company, row[2])
+                        self.insert_customers_group(company, row[1])
+                        self.insert_territories(row[2])
                         if not frappe.db.exists("Customer", row[0]):
                             
                             doc = frappe.new_doc("Customer")
-                            doc.cutomer_name = row[0]
+                            doc.customer_name = row[0]
                             doc.customer_group = row[1]
                             doc.territory = row[2]
                             doc.insert()
@@ -573,7 +589,7 @@ class SystemSetup(Document):
             customers_group_parent = frappe.db.sql("select name from `tabCustomer Group` where is_group = 1 order by creation asc limit 1")[0][0] 
             doc.parent_customer_group = customers_group_parent
             account = frappe.get_value("Company", company,"default_receivable_account")
-            if not expense_aacount:
+            if not account:
                 frappe.throw(_("Please insert the default receivable account in Company"))
 
             doc.accounts = []
@@ -586,3 +602,134 @@ class SystemSetup(Document):
             doc.is_group = 0
             doc.insert()
             frappe.db.commit()
+
+    def delete_nongroup_customer_groups(self):
+        customer_groups = frappe.db.sql("select name from `tabCustomer Group` where is_group = 0", as_dict = True)
+        for i in customer_groups:
+            frappe.delete_doc("Customer Group", i['name'], force=True)
+        frappe.db.commit()
+
+    def insert_territories(self, territory):
+        if not frappe.db.exists("Territory", territory):
+            doc =  frappe.new_doc("Territory")
+            doc.territory_name = territory
+            territories_parent = frappe.db.sql("select name from `tabTerritory` where is_group = 1 order by creation asc limit 1")[0][0] 
+            doc.parent_territory = territories_parent
+            doc.is_group = 0
+            doc.insert()
+            frappe.db.commit()
+
+    def delete_nongroup_territories(self):
+        territories = frappe.db.sql("select name from `tabTerritory` where is_group = 0", as_dict = True)
+        for i in territories:
+            frappe.delete_doc("Territory", i['name'], force=True)
+        frappe.db.commit()
+
+
+    def setup_suppliers(self):
+
+        if self.suppliers_attachment:
+            file = frappe.get_doc("File", {"file_url": self.suppliers_attachment})
+            filename = file.get_full_path()
+
+            company = frappe.db.get_single_value('Global Defaults', 'default_company')
+            abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
+
+            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+                if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
+                    rows = read_csv_content(infile.read())
+                elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
+                    content = file.get_content()
+                    rows = read_xls_file_from_attached_file(fcontent=content)
+                elif frappe.safe_encode(filename).lower().endswith("xlsx".encode('utf-8')):
+                    content = file.get_content()
+                    rows = read_xlsx_file_from_attached_file(fcontent=content)
+                else:
+                    frappe.throw(_("Only CSV and Excel files can be used to for importing data. Please check the file format you are trying to upload"))
+
+                self.delete_nongroup_supplier_groups()
+
+                for index, row in enumerate(rows):
+                    if index != 0:
+                        self.insert_suppliers_group(company, row[1])
+                        if not frappe.db.exists("Supplier", row[0]):
+                            
+                            doc = frappe.new_doc("Supplier")
+                            doc.supplier_name = row[0]
+                            doc.supplier_group = row[1]
+                            if row[2].lower() == "individual":
+                                doc.supplier_type = "Individual"
+                            elif row[20].lower() == "company":
+                                doc.supplier_type = "Company"
+                            else:
+                                frappe.throw(_("Supplier Type column values must be Company or Individual"))
+                            doc.insert()
+        else:
+            frappe.throw(_("Please attach a file"))
+
+    def insert_suppliers_group(self, company, supplier_group):
+        if not frappe.db.exists("Supplier Group", supplier_group):
+            doc =  frappe.new_doc("Supplier Group")
+            doc.supplier_group_name = supplier_group
+            suppliers_group_parent = frappe.db.sql("select name from `tabSupplier Group` where is_group = 1 order by creation asc limit 1")[0][0] 
+            doc.parent_supplier_group = suppliers_group_parent
+            account = frappe.get_value("Company", company,"default_payable_account")
+            if not account:
+                frappe.throw(_("Please insert the default payable account in Company"))
+
+            doc.accounts = []
+            doc.append("accounts", {
+
+            "company": company,
+            "account": account
+
+            })
+            doc.is_group = 0
+            doc.insert()
+            frappe.db.commit()
+
+    def delete_nongroup_supplier_groups(self):
+        supplier_groups = frappe.db.sql("select name from `tabSupplier Group` where is_group = 0", as_dict = True)
+        for i in supplier_groups:
+            frappe.delete_doc("Supplier Group", i['name'], force=True)
+        frappe.db.commit()
+
+    def setup_warehouses(self):
+
+        if self.warehouses_attachment:
+            file = frappe.get_doc("File", {"file_url": self.warehouses_attachment})
+            filename = file.get_full_path()
+
+            company = frappe.db.get_single_value('Global Defaults', 'default_company')
+            abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
+
+            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+                if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
+                    rows = read_csv_content(infile.read())
+                elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
+                    content = file.get_content()
+                    rows = read_xls_file_from_attached_file(fcontent=content)
+                elif frappe.safe_encode(filename).lower().endswith("xlsx".encode('utf-8')):
+                    content = file.get_content()
+                    rows = read_xlsx_file_from_attached_file(fcontent=content)
+                else:
+                    frappe.throw(_("Only CSV and Excel files can be used to for importing data. Please check the file format you are trying to upload"))
+
+                self.delete_nongroup_warehouse_groups()
+
+                for index, row in enumerate(rows):
+                    if index != 0:
+                        if not frappe.db.exists("Warehouse", row[0]+' - '+abbr):
+                            
+                            doc = frappe.new_doc("Warehouse")
+                            doc.warehouse_name = row[0]
+                            doc.parent_warehouse = frappe.db.sql("select name from `tabWarehouse` where is_group = 1 order by creation asc limit 1")[0][0] 
+                            doc.insert()
+        else:
+            frappe.throw(_("Please attach a file"))
+
+    def delete_nongroup_warehouse_groups(self):
+        warehouses = frappe.db.sql("select name from `tabWarehouse` where is_group = 0", as_dict = True)
+        for i in warehouses:
+            frappe.delete_doc("Warehouse", i['name'], force=True)
+        frappe.db.commit()
