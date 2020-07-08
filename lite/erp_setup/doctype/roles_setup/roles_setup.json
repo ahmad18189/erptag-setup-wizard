@@ -1,0 +1,147 @@
+{
+ "creation": "2020-05-04 02:50:41.718641",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "accounts_manager",
+  "hr_manager",
+  "stock_manager",
+  "sales_manager",
+  "purchase_manager",
+  "column_break_6",
+  "accounts_user",
+  "hr_user",
+  "stock_user",
+  "purchase_user",
+  "sales_user",
+  "column_break_5",
+  "accounts_viewer",
+  "hr_viewer",
+  "stock_viewer",
+  "purchase_viewer",
+  "sales_viewer"
+ ],
+ "fields": [
+  {
+   "fieldname": "accounts_manager",
+   "fieldtype": "Link",
+   "label": "Accounts Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "hr_manager",
+   "fieldtype": "Link",
+   "label": "HR Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_manager",
+   "fieldtype": "Link",
+   "label": "Sales Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stock_manager",
+   "fieldtype": "Link",
+   "label": "Stock Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "purchase_manager",
+   "fieldtype": "Link",
+   "label": "Purchase Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "accounts_user",
+   "fieldtype": "Link",
+   "label": "Accounts User",
+   "options": "User"
+  },
+  {
+   "fieldname": "hr_user",
+   "fieldtype": "Link",
+   "label": "HR User",
+   "options": "User"
+  },
+  {
+   "fieldname": "stock_user",
+   "fieldtype": "Link",
+   "label": "Stock User",
+   "options": "User"
+  },
+  {
+   "fieldname": "purchase_user",
+   "fieldtype": "Link",
+   "label": "Purchase User",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_user",
+   "fieldtype": "Link",
+   "label": "Sales User",
+   "options": "User"
+  },
+  {
+   "fieldname": "accounts_viewer",
+   "fieldtype": "Link",
+   "label": "Accounts Viewer",
+   "options": "User"
+  },
+  {
+   "fieldname": "hr_viewer",
+   "fieldtype": "Link",
+   "label": "HR Viewer",
+   "options": "User"
+  },
+  {
+   "fieldname": "stock_viewer",
+   "fieldtype": "Link",
+   "label": "Stock Viewer",
+   "options": "User"
+  },
+  {
+   "fieldname": "purchase_viewer",
+   "fieldtype": "Link",
+   "label": "Purchase Viewer",
+   "options": "User"
+  },
+  {
+   "fieldname": "sales_viewer",
+   "fieldtype": "Link",
+   "label": "Sales Viewer",
+   "options": "User"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2020-05-27 09:03:58.373718",
+ "modified_by": "Administrator",
+ "module": "ERP Setup",
+ "name": "Roles Setup",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -5,48 +5,42 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "section_break_1",
+  "progress_bar",
   "status",
   "employees_and_users_setup",
   "employees_attachment",
   "column_break_4",
+  "annual_leave_type",
   "employees_button",
-  "roles_setup",
-  "accounts_manager",
-  "hr_manager",
-  "sales_manager",
-  "buying_manager",
-  "stock_manager",
-  "column_break_11",
-  "accounts_user",
-  "hr_user",
-  "sales_user",
-  "buying_user",
-  "stock_user",
   "items_setup",
   "items_attachment",
   "column_break_20",
   "items_button",
+  "no_items",
   "customers_setup",
   "customers_attachment",
   "column_break_24",
   "customers_button",
+  "no_customers",
   "suppliers_setup",
   "suppliers_attachment",
   "column_break_28",
   "suppliers_button",
+  "no_suppliers",
   "warehouses_setup",
   "warehouses_attachment",
   "column_break_32",
-  "warehouses_button"
+  "warehouses_button",
+  "no_warehouses"
  ],
  "fields": [
   {
+   "default": "Employees and Users Setup",
    "fieldname": "status",
    "fieldtype": "Select",
-   "hidden": 1,
-   "label": "Status",
-   "options": "Employees and Users Setup\nRoles Setup\nItems Setup\nCustomers Setup\nSuppliers Setup\nWarehouses Setup\nComplete",
-   "read_only": 1
+   "label": "Step",
+   "options": "Employees and Users Setup\nItems Setup\nCustomers Setup\nSuppliers Setup\nWarehouses Setup"
   },
   {
    "fieldname": "employees_attachment",
@@ -61,70 +55,6 @@
    "fieldname": "employees_button",
    "fieldtype": "Button",
    "label": "Download Template"
-  },
-  {
-   "fieldname": "accounts_manager",
-   "fieldtype": "Link",
-   "label": "Accounts Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "hr_manager",
-   "fieldtype": "Link",
-   "label": "HR Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "sales_manager",
-   "fieldtype": "Link",
-   "label": "Sales Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "buying_manager",
-   "fieldtype": "Link",
-   "label": "Buying Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "column_break_11",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "accounts_user",
-   "fieldtype": "Link",
-   "label": "Accounts User",
-   "options": "User"
-  },
-  {
-   "fieldname": "hr_user",
-   "fieldtype": "Link",
-   "label": "HR User",
-   "options": "User"
-  },
-  {
-   "fieldname": "sales_user",
-   "fieldtype": "Link",
-   "label": "Sales User",
-   "options": "User"
-  },
-  {
-   "fieldname": "buying_user",
-   "fieldtype": "Link",
-   "label": "Buying User",
-   "options": "User"
-  },
-  {
-   "fieldname": "stock_manager",
-   "fieldtype": "Link",
-   "label": "Stock Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "stock_user",
-   "fieldtype": "Link",
-   "label": "Stock User",
-   "options": "User"
   },
   {
    "fieldname": "items_attachment",
@@ -191,13 +121,6 @@
   },
   {
    "bold": 1,
-   "collapsible_depends_on": "doc.status == 'Roles Setup'",
-   "fieldname": "roles_setup",
-   "fieldtype": "Section Break",
-   "label": "ROLES SETUP"
-  },
-  {
-   "bold": 1,
    "collapsible_depends_on": "eval:doc.status == 'Items Setup'",
    "fieldname": "items_setup",
    "fieldtype": "Section Break",
@@ -222,12 +145,57 @@
    "fieldname": "warehouses_setup",
    "fieldtype": "Section Break",
    "label": "WAREHOUSES SETUP"
+  },
+  {
+   "default": "0",
+   "description": "There will be 2 general items (Service and Stock)",
+   "fieldname": "no_items",
+   "fieldtype": "Check",
+   "label": "No Items"
+  },
+  {
+   "default": "0",
+   "description": "There will be a general customer",
+   "fieldname": "no_customers",
+   "fieldtype": "Check",
+   "label": "No Customers"
+  },
+  {
+   "default": "0",
+   "description": "There will be a general Supplier",
+   "fieldname": "no_suppliers",
+   "fieldtype": "Check",
+   "label": "No Suppliers"
+  },
+  {
+   "default": "0",
+   "description": "There will be a general Warehouse",
+   "fieldname": "no_warehouses",
+   "fieldtype": "Check",
+   "label": "No Warehouses"
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "progress_bar",
+   "fieldtype": "HTML",
+   "label": "Progress Bar",
+   "options": "<div class=\"ldBar\" data-value=\"50\">\n</div>"
+  },
+  {
+   "default": "30 Days With Holidays",
+   "fieldname": "annual_leave_type",
+   "fieldtype": "Select",
+   "label": "Annual Leave Type",
+   "options": "30 Days With Holidays\n21 Days Without Holidays"
   }
  ],
  "hide_toolbar": 1,
  "icon": "fa fa-star",
  "issingle": 1,
- "modified": "2020-04-26 21:56:03.513679",
+ "modified": "2020-05-05 00:54:09.490398",
  "modified_by": "Administrator",
  "module": "ERP Setup",
  "name": "System Setup",

@@ -4,7 +4,7 @@ from frappe import _
 def get_data():
 	return [
 		{
-			"label": _("System Setup"),
+			"label": _("Setups"),
 			"items": [
 				{
 					"type": "doctype",
@@ -13,7 +13,16 @@ def get_data():
 					"label": _("System Setup"),
 					"onboard": 1,
 					"icon": "fa fa-star",
+				},
+				{
+					"type": "doctype",
+					"name": "Roles Setup",
+					"description": _("Roles Setup"),
+					"label": _("Roles Setup"),
+					"onboard": 1,
+					"icon": "fa fa-star",
 				}
+
 			]
 		}
 		

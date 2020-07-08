@@ -9,41 +9,61 @@ from frappe.model.document import Document
 from frappe.utils.csvutils import read_csv_content_from_uploaded_file, read_csv_content
 from frappe.utils.xlsxutils import read_xlsx_file_from_attached_file, read_xls_file_from_attached_file
 from frappe.utils.password import update_password
-from frappe.utils import getdate, now_datetime, nowdate
+from frappe.utils import getdate, now_datetime, nowdate, date_diff
 from frappe.permissions import clear_user_permissions_for_doctype
+from lite.api import unblock_modules
 
 class SystemSetup(Document):
 
     def setup_system(self):
         if self.status == "Employees and Users Setup":
             self.setup_employees_and_users()
-            self.status = "Roles Setup"
-            self.save()
-
-        elif self.status == "Roles Setup":
-            self.setup_roles()
             self.status = "Items Setup"
             self.save()
+            unblock_modules('HR')
+            frappe.msgprint(_("Done!, HR module is unlocked now"))
+
+        # elif self.status == "Roles Setup":
+        #     self.setup_roles()
+        #     self.status = "Items Setup"
+        #     self.save()
 
         elif self.status == "Items Setup":
             self.setup_items()
             self.status = "Customers Setup"
             self.save()
+            unblock_modules('Stock')
+            frappe.msgprint(_("Done!, Stock module is unlocked now"))
 
         elif self.status == "Customers Setup":
             self.setup_customers()
             self.status = "Suppliers Setup"
             self.save()
+            unblock_modules('Selling')
+            frappe.msgprint(_("Done!, Selling module is unlocked now"))
 
         elif self.status == "Suppliers Setup":
             self.setup_suppliers()
             self.status = "Warehouses Setup"
             self.save()
+            unblock_modules('Buying')
+            frappe.msgprint(_("Done!, Buying module is unlocked now"))
 
         elif self.status == "Warehouses Setup":
             self.setup_warehouses()
-            self.status = "Complete"
+            # self.status = "Complete"
             self.save()
+            unblock_modules('Accounts')
+            frappe.msgprint(_("Done!, Accounts module is unlocked now"))
+
+    # def validate(self):
+    #     if self.status == "Complete":
+    #         unblock_modules()
+            # frappe.local.flags.redirect_location = "/desk"
+            # raise frappe.Redirect
+            # frappe.local.response["type"] = "redirect"
+            # frappe.local.response["location"] = "/desk"
+            
 
     def setup_employees_and_users(self):
         if self.employees_attachment:
@@ -53,7 +73,7 @@ class SystemSetup(Document):
             company = frappe.db.get_single_value('Global Defaults', 'default_company')
             abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
 
-            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+            with open(filename, "r", encoding = "utf8") as infile:
                 if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
                     rows = read_csv_content(infile.read())
                 elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
@@ -331,12 +351,14 @@ class SystemSetup(Document):
             a_doc = frappe.new_doc("Leave Type")
             a_doc.leave_type_name = "Annual Leave-اجازة سنوية"
             a_doc.is_carry_forward = 1
-            a_doc.include_holiday = 1
+            a_doc.max_leaves_allowed = 21 if self.annual_leave_type == "21 Days Without Holidays" else 30
+            a_doc.include_holiday = 0 if self.annual_leave_type == "21 Days Without Holidays" else 1
             a_doc.save(ignore_permissions = True)
 
         if not frappe.db.exists("Leave Type", "Sick Leave-اجازة مرضية"):
             s_doc = frappe.new_doc("Leave Type")
             s_doc.leave_type_name = "Sick Leave-اجازة مرضية"
+            a_doc.max_leaves_allowed = 30
             s_doc.include_holiday = 1
             s_doc.save(ignore_permissions = True)
 
@@ -383,25 +405,30 @@ class SystemSetup(Document):
 
     def allocate_leaves(self, employee, no_of_days):
         leave_types=["Annual Leave-اجازة سنوية","Sick Leave-اجازة مرضية"]
-
+        employee_doc = frappe.get_doc("Employee", employee)
+        current_year = str(getdate(nowdate()).year)
         for lt in leave_types:
             if not frappe.db.exists("Leave Allocation", {"employee": employee, "leave_type": lt}): 
                 if lt == "Annual Leave-اجازة سنوية":
-                    nod = float(no_of_days)
+                    if self.annual_leave_type == "21 Days Without Holidays":
+                        nod = (21/365) * (date_diff(str(current_year)+"-12-31", nowdate()))
+                    else:
+                        nod = (30/365) * (date_diff(str(current_year)+"-12-31", nowdate()))
+                    nod += float(no_of_days)
                 elif lt == "Sick Leave-اجازة مرضية":
                     nod = 100
                 # else:
                 #     nod = 200
-
+                from_date = getdate(employee_doc.date_of_joining) if getdate(employee_doc.date_of_joining) > getdate(current_year+"-01-01") else current_year+"-01-01"
                 la = frappe.new_doc('Leave Allocation')
                 la.set("__islocal", 1)
                 la.employee = employee
-                la.employee_name = frappe.db.get_value('Employee',employee,'employee_name')
+                la.employee_name = employee_doc.employee_name
                 la.leave_type = lt
-                la.from_date = nowdate()
-                la.to_date = str(getdate(nowdate()).year)+"-12-31"
+                la.from_date = from_date
+                la.to_date = current_year+"-12-31"
                 la.carry_forward = 1 if lt == "Annual Leave-اجازة سنوية" else 0
-                la.new_leaves_allocated = nod
+                la.new_leaves_allocated = round(nod)
                 la.docstatus = 1
                 la.save(ignore_permissions=True)
         frappe.db.commit()
@@ -502,14 +529,36 @@ class SystemSetup(Document):
             frappe.db.commit()
 
     def setup_items(self):
-        if self.items_attachment:
+        company = frappe.db.get_single_value('Global Defaults', 'default_company')
+        abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
+        if self.no_items:
+            self.delete_nongroup_item_groups()
+            #delete items also
+            self.insert_items_group(company, "General Group")
+            if not frappe.db.exists("Item", {"item_code": "General Stock"}):
+                            
+                i_doc = frappe.new_doc("Item")
+                i_doc.item_code = "General Stock"
+                i_doc.description = "General Stock"
+                i_doc.is_stock_item = 1
+                i_doc.include_item_in_manufacturing = 0
+                i_doc.item_group = "General Group"
+                i_doc.insert()
+            if not frappe.db.exists("Item", {"item_code": "General Service"}):
+                            
+                i_doc = frappe.new_doc("Item")
+                i_doc.item_code = "General Service"
+                i_doc.description = "General Service"
+                i_doc.is_stock_item = 0
+                i_doc.include_item_in_manufacturing = 0
+                i_doc.item_group = "General Group"
+                i_doc.insert()
+
+        elif self.items_attachment:
             file = frappe.get_doc("File", {"file_url": self.items_attachment})
             filename = file.get_full_path()
 
-            company = frappe.db.get_single_value('Global Defaults', 'default_company')
-            abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
-
-            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+            with open(filename, "r", encoding = "utf8") as infile:
                 if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
                     rows = read_csv_content(infile.read())
                 elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
@@ -545,15 +594,27 @@ class SystemSetup(Document):
             frappe.throw(_("Please attach a file"))
 
     def setup_customers(self):
+        company = frappe.db.get_single_value('Global Defaults', 'default_company')
+        abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
 
-        if self.customers_attachment:
+        if self.no_customers:
+            self.delete_nongroup_customer_groups()
+            self.delete_nongroup_territories()
+            self.insert_customers_group(company, "General Group")
+            self.insert_territories("General Territory")
+            if not frappe.db.exists("Customer", "General Customer"):
+                
+                doc = frappe.new_doc("Customer")
+                doc.customer_name = "General Customer"
+                doc.customer_group = "General Group"
+                doc.territory = "General Territory"
+                doc.insert()
+
+        elif self.customers_attachment:
             file = frappe.get_doc("File", {"file_url": self.customers_attachment})
             filename = file.get_full_path()
 
-            company = frappe.db.get_single_value('Global Defaults', 'default_company')
-            abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
-
-            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+            with open(filename, "r", encoding = "utf8") as infile:
                 if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
                     rows = read_csv_content(infile.read())
                 elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
@@ -627,15 +688,23 @@ class SystemSetup(Document):
 
 
     def setup_suppliers(self):
+        company = frappe.db.get_single_value('Global Defaults', 'default_company')
+        abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
+        if self.no_suppliers:
+            self.delete_nongroup_supplier_groups()
+            self.insert_suppliers_group(company, "General Group")
+            if not frappe.db.exists("Supplier", "General Supplier"):
+                doc = frappe.new_doc("Supplier")
+                doc.supplier_name = "General Supplier"
+                doc.supplier_group = "General Group"
+                doc.supplier_type = "Individual"
+                doc.insert()
 
-        if self.suppliers_attachment:
+        elif self.suppliers_attachment:
             file = frappe.get_doc("File", {"file_url": self.suppliers_attachment})
             filename = file.get_full_path()
 
-            company = frappe.db.get_single_value('Global Defaults', 'default_company')
-            abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
-
-            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+            with open(filename, "r", encoding = "utf8") as infile:
                 if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
                     rows = read_csv_content(infile.read())
                 elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
@@ -695,15 +764,26 @@ class SystemSetup(Document):
         frappe.db.commit()
 
     def setup_warehouses(self):
+        company = frappe.db.get_single_value('Global Defaults', 'default_company')
+        abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
 
-        if self.warehouses_attachment:
+        if self.no_warehouses:
+            self.delete_nongroup_warehouse_groups()
+            if not frappe.db.exists("Warehouse", 'General Warehouse - '+abbr):
+                            
+                doc = frappe.new_doc("Warehouse")
+                doc.warehouse_name = 'General Warehouse'
+                doc.parent_warehouse = frappe.db.sql("select name from `tabWarehouse` where is_group = 1 order by creation asc limit 1")[0][0] 
+                doc.insert()
+
+        elif self.warehouses_attachment:
             file = frappe.get_doc("File", {"file_url": self.warehouses_attachment})
             filename = file.get_full_path()
 
             company = frappe.db.get_single_value('Global Defaults', 'default_company')
             abbr = frappe.get_value("Company", filters = {'name': company}, fieldname = 'abbr')
 
-            with open(filename, "r", encoding = "ISO-8859-1") as infile:
+            with open(filename, "r", encoding = "utf8") as infile:
                 if frappe.safe_encode(filename).lower().endswith("csv".encode('utf-8')):
                     rows = read_csv_content(infile.read())
                 elif frappe.safe_encode(filename).lower().endswith("xls".encode('utf-8')):
