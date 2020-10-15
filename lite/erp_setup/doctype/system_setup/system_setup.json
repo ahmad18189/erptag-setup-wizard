@@ -8,6 +8,10 @@
   "section_break_1",
   "progress_bar",
   "status",
+  "website_setup_section",
+  "logo",
+  "column_break_6",
+  "main_color",
   "employees_and_users_setup",
   "employees_attachment",
   "column_break_4",
@@ -36,11 +40,11 @@
  ],
  "fields": [
   {
-   "default": "Employees and Users Setup",
+   "default": "Website Setup",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Step",
-   "options": "Employees and Users Setup\nItems Setup\nCustomers Setup\nSuppliers Setup\nWarehouses Setup"
+   "options": "Website Setup\nEmployees and Users Setup\nItems Setup\nCustomers Setup\nSuppliers Setup\nWarehouses Setup"
   },
   {
    "fieldname": "employees_attachment",
@@ -190,13 +194,33 @@
    "fieldtype": "Select",
    "label": "Annual Leave Type",
    "options": "30 Days With Holidays\n21 Days Without Holidays"
+  },
+  {
+   "depends_on": "eval:doc.status == 'Website Setup'",
+   "fieldname": "website_setup_section",
+   "fieldtype": "Section Break",
+   "label": "Website Setup"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach",
+   "label": "Logo"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "main_color",
+   "fieldtype": "Color",
+   "label": "Main Color"
   }
  ],
  "hide_toolbar": 1,
  "icon": "fa fa-star",
  "issingle": 1,
- "modified": "2020-05-05 00:54:09.490398",
- "modified_by": "Administrator",
+ "modified": "2020-10-15 14:03:19.542659",
+ "modified_by": "omar@omar.com",
  "module": "ERP Setup",
  "name": "System Setup",
  "owner": "Administrator",
