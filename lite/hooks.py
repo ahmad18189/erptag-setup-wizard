@@ -15,8 +15,19 @@ app_license = "MIT"
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = ["/assets/lite/css/loading-bar.css"]
-app_include_js = ["/assets/lite/js/loading-bar.js"]
+# app_include_css = ["/assets/lite/css/loading-bar.css"]
+# app_include_js = ["/assets/lite/js/loading-bar.js"]
+
+app_include_css = [
+    "/assets/lite/css/loading-bar.css",
+    "/assets/lite/css/fontawesome.css",
+    "/assets/lite/css/setup_wizard_modal.css"
+]
+
+app_include_js = [
+    "/assets/lite/js/loading-bar.js",
+    "/assets/lite/js/custom_pageview.js"
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/lite/css/lite.css"

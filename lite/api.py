@@ -9,6 +9,99 @@ from dateutil.relativedelta import relativedelta
 from frappe.utils import cint, cstr, date_diff, flt, formatdate, getdate, get_link_to_form, \
     comma_or, get_fullname, add_years, add_months, add_days, nowdate , comma_and, get_datetime
 
+from frappe.utils import cstr, nowdate, cint
+from frappe import utils
+from erpnext.setup.doctype.item_group.item_group import get_item_for_list_in_html
+from erpnext.shopping_cart.product_info import set_product_info_for_website
+import datetime
+from datetime import date
+from frappe.utils.password import update_password as _update_password
+from frappe.utils.data import flt, nowdate, getdate, cint
+from frappe.utils import cint, cstr, flt, nowdate, comma_and, date_diff, getdate , add_days
+from pypaytabs import Paytabs
+from pypaytabs import Utilities as util
+import requests 
+
+
+
+
+
+@frappe.whitelist(allow_guest=True)
+def get_customer_logo_and_color():
+    customer_color = '#190E2A'
+    customer_logo = '/assets/mawred_theme/images/logo-white.png'
+    doc = frappe.get_doc("System Setup")
+    if doc.logo:
+        customer_logo = doc.logo
+
+    if doc.main_color:
+        customer_color = doc.main_color
+
+    return customer_logo, customer_color
+
+
+@frappe.whitelist(allow_guest=True)
+def edit_system_setup(logo, main_color, annual_leave_type, users_attach, no_items, items_attach, no_customers, customers_attach, no_suppliers, suppliers_attach, no_warehouses, warehouses_attach):
+    doc = frappe.get_doc("System Setup")
+    
+    doc.main_color = main_color
+    doc.annual_leave_type = annual_leave_type
+
+    if len(logo)>7:
+        doc.logo = logo
+    else:
+        doc.logo = ''
+
+    if len(users_attach)>7:
+        doc.employees_attachment = users_attach
+    else:
+        doc.employees_attachment = ''
+
+    if len(items_attach)>7:
+        doc.no_items = 0
+        doc.items_attachment = items_attach
+    else:
+        doc.no_items = 1
+        doc.items_attachment = ''
+
+    if len(customers_attach)>7:
+        doc.no_customers = 0
+        doc.customers_attachment = customers_attach
+    else:
+        doc.no_customers = 1
+        doc.customers_attachment = ''
+
+    if len(suppliers_attach)>7:
+        doc.no_suppliers = 0
+        doc.suppliers_attachment = suppliers_attach
+    else:
+        doc.no_suppliers = 1
+        doc.suppliers_attachment = ''
+
+    if len(warehouses_attach)>7:
+        doc.no_warehouses = 0
+        doc.warehouses_attachment = warehouses_attach
+    else:
+        doc.no_warehouses = 1
+        doc.warehouses_attachment = ''
+    
+    # doc.flags.ignore_mandatory = True
+    # doc.save(ignore_permissions=True)
+    
+    doc.save()
+
+    return 1
+
+
+
+
+@frappe.whitelist(allow_guest=True)
+def get_system_setup_info():
+    doc = frappe.get_doc("System Setup")
+    return doc 
+
+
+
 
 def create_viewer_roles():
 	pass
