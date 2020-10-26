@@ -90,6 +90,8 @@ def edit_system_setup(logo, main_color, annual_leave_type, users_attach, no_item
     
     doc.save()
 
+    frappe.msgprint("Successfully saved!")
+
     return 1
 
 

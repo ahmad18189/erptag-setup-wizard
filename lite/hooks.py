@@ -20,8 +20,8 @@ app_license = "MIT"
 
 app_include_css = [
     "/assets/lite/css/loading-bar.css",
-    "/assets/lite/css/fontawesome.css",
-    "/assets/lite/css/setup_wizard_modal.css"
+    "/assets/lite/css/fontawesome.css"
+    # "/assets/lite/css/setup_wizard_modal.css"
 ]
 
 app_include_js = [

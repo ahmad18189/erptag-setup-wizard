@@ -20,7 +20,7 @@
 
 
 $(document).ready((ev) => {
-  
+
 
 
 
@@ -43,8 +43,9 @@ if(!r.message['logo'] || !r.message['employees_attachment'] || !r.message['items
         `)
 
 
-}
 
+
+}
 
 
 
@@ -52,399 +53,286 @@ if(!r.message['logo'] || !r.message['employees_attachment'] || !r.message['items
 
       $("#body_div #page-desktop .container").prepend(`
 
-<style>
-.progress-bar-animated {
-    /* -webkit-animation: progress-bar-stripes 1s linear infinite; */
-    animation: progress-bar-stripes 2s linear infinite;
-}
-.progress-bar-striped {
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    background-size: 2rem 2rem;
-}
-</style>
-
-        <div class="modal fade" id="setup_wizard_modal" role="dialog">
-          <div class="modal-dialog" style='margin: auto;width: 70%;top: 30px;'>
-          
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><i class="fa fa-cog" aria-hidden="true"></i> Setup Wizard</h4>
-              </div>
-              <div class="modal-body" style="">
-              
-              <!--<div class="modal-body" style="overflow-y: scroll;height: 60rem;">-->
 
 
-                <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-xs-12 text-center p-0 mt-3 mb-2">
-            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-            <!--
-                <h2 id="heading">Sign Up Your User Account</h2>
-                <p>Fill all form field to go to next step</p>
-            -->
-                <form id="msform">
-                    <!-- progressbar -->
-                    <ul id="progressbar">
-                        <li class="active" id="account"><strong>Website</strong></li>
-                        <li id="personal"><strong>Employees & Users</strong></li>
-                        <li id="payment"><strong>Items</strong></li>
-                        <li id="customers"><strong>Customers</strong></li>
-                        <li id="suppliers"><strong>Suppliers</strong></li>
-                        <li id="confirm"><strong>Warehouses</strong></li>
-                    </ul>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div> <br> <!-- fieldsets -->
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Website Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 1 - 7</h2>
-                                </div>
-                            </div>
+
+              <link href="/assets/lite/setup_wizard/css/style.css" rel="stylesheet">
+              <link href="/assets/lite/setup_wizard/css/responsive.css" rel="stylesheet">
+              <link href="/assets/lite/setup_wizard/css/icon_fonts/css/all_icons_min.css" rel="stylesheet">
+              <link href="/assets/lite/setup_wizard/css/skins/square/grey.css" rel="stylesheet">
 
 
-                        <div class='row'>
-                          <div class='col-xs-6'>
-                            <label class="fieldlabels">Upload Your Logo:</label>
-                            <input type="button" name="logo" id="logo" class="logo" value='${r.message['logo'] ? r.message['logo'] : 'Attach'}' >
-                          </div>
 
-                          <div class='col-xs-2'>
-                            <label class="fieldlabels">Main Color: *</label>
-                            <input type="color" name="main_color" id="main_color" class="main_color" placeholder="Main Color" 
-                            style='height:4rem;' value='${r.message['main_color']}'
-                            />
-                          </div>
+              <style>
 
-                        </div>
-                        
-                        </div> <input type="button" name="next" class="next action-button" value="Next" />
-                    </fieldset>
+                #form_container input[type="checkbox"]{
+                  visibility: initial!important;
+                }
 
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Employees and Users Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 2 - 7</h2>
-                                </div>
-                            </div>
+                #form_container input[type="checkbox"]:checked:before{
+                      visibility: hidden;
+                }
+
+                #form_container input[type="checkbox"]:before{
+                  visibility: hidden;
+                }
+
+
+                #form_container input[type="checkbox"]{
+                  background: none!important;
+                  background-color: #fff!important;
+                  border: none!important;
+                  border-radius: 0!important;
+                  -webkit-box-shadow: none!important;
+                  box-shadow: none!important;
+                  -webkit-transition: none!important;
+                  color: #999!important;
+                  height: 18px!important;
+                  font-size: 16px!important;
+                  font-weight: 400!important;
+                  margin-bottom: 25px!important;
+                  padding: 6px 12px 6px 0!important;
+                }
+
+
+              </style>
+
+              <script src="/assets/lite/setup_wizard/js/jquery-3.5.1.min.js"></script>
+              <script src="/assets/lite/setup_wizard/js/registration_wizard_func.js"></script>
+              <script src="/assets/lite/setup_wizard/js/common_scripts_min.js"></script>
 
 
 
 
-                        <div class='row'>
-                          <div class='col-xs-6'>
+  <div class="modal fade" id="setup_wizard_modal" role="dialog">
 
-                            
-                            <label class="fieldlabels">Annual Leave Type:</label>
 
-                            <select class="form-control" id="annual_leave_type" style='height:4rem;'>
+
+    <div id="form_container" class='modal-content'>
+      <div class="row">
+        <div class="col-lg-5">
+          <div id="left_form">
+            <figure><img src="/assets/lite/setup_wizard/img/registration_bg.svg" alt=""></figure>
+            <h2>Setup Wizard</h2>
+            <p>Please follow the steps to complete the setup.</p>
+          </div>
+        </div>
+        <div class="col-lg-7">
+
+          <div id="wizard_container">
+            <div id="top-wizard">
+              <div id="progressbar"></div>
+            </div>
+            <!-- /top-wizard -->
+            <form>
+              <input id="website" name="website" type="text" value="">
+              <!-- Leave for security protection, read docs for details -->
+              <div id="middle-wizard">
+
+                <div class="step">
+                  <h3 class="main_question"><strong>1/6</strong>Website Setup</h3>
+                  
+
+                  <div class="row">
+                    <div class="col-md-10">
+                      <div class="form-group">
+                            <input type="button" name="logo" id="logo" class="logo form-control" value='${r.message['logo'] ? r.message['logo'] : 'Attach'}' >
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input type="color" name="main_color" id="main_color" class="main_color form-control" placeholder="Main Color" 
+                            style='height:4rem;' value='${r.message['main_color']}'/>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+                <div class="step">
+                  <h3 class="main_question"><strong>2/6</strong>Employees and Users Setup</h3>
+                  
+
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="styled-select">
+                          <select id="annual_leave_type">
                                 <option value="30 Days With Holidays">30 Days With Holidays</option>
                                 <option value="21 Days Without Holidays">21 Days Without Holidays</option>
                             </select>
-                            <br>
-
-                            <label class="fieldlabels">Download Template:</label>
-                            <input type="button" name="users_template" id="users_template" value='Download' />
-
-                            <label class="fieldlabels">Attach:</label>
-                            <input type="button" name="users_attach" id="users_attach" class="users_attach" value='${r.message['employees_attachment'] ? r.message['employees_attachment'] : 'Attach'}'>
-
-
-                          </div>
-
-
                         </div>
-                        
-
-                        
-
-                        </div> 
-                        <input type="button" name="next" class="next action-button" value="Next" />
-                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                    </fieldset>
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Items Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 3 - 7</h2>
-                                </div>
-                            </div>
+                      </div>
+                    </div>
+                  </div>
 
 
-                          <div class="row">
-                            <div class='col-xs-6'>
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="form-group">
+                          <input type="button" name="users_attach" id="users_attach" class="users_attach form-control" value='${r.message['employees_attachment'] ? r.message['employees_attachment'] : 'Attach'}'>
 
-                              
-                              <label class="fieldlabels" for="no_items">No Items:</label>
-                                <input type="checkbox" id="no_items" name="no_items" >
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                            <input type="button" name="users_template" id="users_template" class="users_template form-control" value='Download' />
+                      </div>
+                    </div>
+                  </div>
 
-                              <label class="fieldlabels">Download Template:</label>
-                              <input type="button" name="items_template" id="items_template" value='Download' />
-
-                              <label class="fieldlabels">Attach:</label>
-                              <input type="button" name="items_attach" id="items_attach" class="items_attach" value='${r.message['items_attachment'] ? r.message['items_attachment'] : 'Attach'}'>
-
-                            </div>
-                          </div>
-
-
-
-                        </div>
-                        <input type="button" name="next" class="next action-button" value="Next" />
-                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                    </fieldset>
-
-
-
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Customers Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 4 - 7</h2>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                              <div class='col-xs-6'>
-
-                                
-                                <label class="fieldlabels">No Customers:</label>
-                                <input type="checkbox" id="no_customers" name="no_customers" >
-
-                                <label class="fieldlabels">Download Template:</label>
-                                <input type="button" name="customers_template" id="customers_template" value='Download' />
-
-                                <label class="fieldlabels">Attach:</label>
-                                <input type="button" name="customers_attach" id="customers_attach" class="customers_attach" value='${r.message['customers_attachment'] ? r.message['customers_attachment'] : 'Attach'}'>
-
-                              </div>
-                          </div>
-
-
-
-                        </div>
-
-                        <input type="button" name="next" class="next action-button" value="Next" />
-                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-
-                    </fieldset>
+                </div>
 
 
 
 
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Suppliers Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 5 - 7</h2>
-                                </div>
-                            </div>
+                <div class="step">
+                  <h3 class="main_question"><strong>3/6</strong>Items Setup</h3>
+                  
 
-                            <div class="row">
-                              <div class='col-xs-6'>
+                  <div class="row">
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <input type="checkbox" id="no_items" name="no_items" class="no_items form-control" >
+                      </div>
+                    </div>
+                  </div>
 
-                                
-                                <label class="fieldlabels">No Suppliers:</label>
-                                <input type="checkbox" id="no_suppliers" name="no_suppliers" >
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="form-group">
+                          <input type="button" name="items_attach" id="items_attach" class="items_attach form-control" value='${r.message['items_attachment'] ? r.message['items_attachment'] : 'Attach'}'>
 
-                                <label class="fieldlabels">Download Template:</label>
-                                <input type="button" name="suppliers_template" id="suppliers_template" value='Download' />
-
-                                <label class="fieldlabels">Attach:</label>
-                                <input type="button" name="suppliers_attach" id="suppliers_attach" class="suppliers_attach" value='${r.message['suppliers_attachment'] ? r.message['suppliers_attachment'] : 'Attach'}'>
-
-                              </div>
-                          </div>
-
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                              <input type="button" name="items_template" id="items_template" class="items_template form-control" value='Download' />
+                      </div>
+                    </div>
+                  </div>
 
 
-                        </div>
-
-                        <input type="button" name="next" class="next action-button" value="Next" />
-                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-
-                    </fieldset>
+                </div>
 
 
 
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Warehouses Setup:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 6 - 7</h2>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                              <div class='col-xs-6'>
+                <div class="step">
+                  <h3 class="main_question"><strong>4/6</strong>Customers Setup</h3>
+                  
 
-                                
-                                <label class="fieldlabels">No Warehouses:</label>
-                                <input type="checkbox" id="no_warehouses" name="no_warehouses" >
+                  <div class="row">
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <input type="checkbox" id="no_customers" name="no_customers" class="no_customers form-control" >
+                      </div>
+                    </div>
+                  </div>
 
-                                <label class="fieldlabels">Download Template:</label>
-                                <input type="button" name="warehouses_template" id="warehouses_template" value='Download' />
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="form-group">
+                          <input type="button" name="customers_attach" id="customers_attach" class="customers_attach form-control" value='${r.message['customers_attachment'] ? r.message['customers_attachment'] : 'Attach'}'>
 
-                                <label class="fieldlabels">Attach:</label>
-                                <input type="button" name="warehouses_attach" id="warehouses_attach" class="warehouses_attach" value='${r.message['warehouses_attachment'] ? r.message['warehouses_attachment'] : 'Attach'}'>
-
-                              </div>
-                          </div>
-
-
-
-                        </div>
-
-                        <input type="button" name="next" id='submit_button' class="next action-button" value="Submit" />
-                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                    </fieldset>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                              <input type="button" name="customers_template" id="customers_template" class="customers_template form-control" value='Download' />
+                      </div>
+                    </div>
+                  </div>
 
 
-                    <fieldset>
-                        <div class="form-card">
-                            <div class="row">
-                                <div class="col-7">
-                                    <h2 class="fs-title">Finish:</h2>
-                                </div>
-                                <div class="col-5">
-                                    <h2 class="steps">Step 7 - 7</h2>
-                                </div>
-                            </div> <br><br>
-                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2> <br>
-                            <div class="row justify-content-center">
-                                <div class="col-3 text-center"> <img src="https://i.imgur.com/GwStPmg.png" class="fit-image"> </div>
-                            </div> <br><br>
-                            <div class="row justify-content-center">
-                                <div class="col-7 text-center">
-                                    <h5 class="purple-text text-center">Successfully Saved</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>
 
 
 
+
+
+                <div class="step">
+                  <h3 class="main_question"><strong>5/6</strong>Suppliers Setup</h3>
+                  
+
+                  <div class="row">
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <input type="checkbox" id="no_suppliers" name="no_suppliers" class="no_suppliers form-control" >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="form-group">
+                          <input type="button" name="suppliers_attach" id="suppliers_attach" class="suppliers_attach form-control" value='${r.message['suppliers_attachment'] ? r.message['suppliers_attachment'] : 'Attach'}'>
+
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                              <input type="button" name="suppliers_template" id="suppliers_template" class="suppliers_template form-control" value='Download' />
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+
+                <div class="submit step ">
+                  <h3 class="main_question"><strong>6/6</strong>Warehouses Setup</h3>
+                  
+                  
+                  <div class="row">
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <input type="checkbox" id="no_warehouses" name="no_warehouses" class="no_warehouses form-control" >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-9">
+                      <div class="form-group">
+                          <input type="button" name="warehouses_attach" id="warehouses_attach" class="warehouses_attach form-control" value='${r.message['warehouses_attachment'] ? r.message['warehouses_attachment'] : 'Attach'}'>
+
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                              <input type="button" name="warehouses_template" id="warehouses_template" class="warehouses_template form-control" value='Download' />
+                      </div>
+                    </div>
+                  </div>
 
               </div>
-             
 
-            </div>
-            
+              <!-- /middle-wizard -->
+              <div id="bottom-wizard">
+                <button type="button" name="backward" class="backward">Backward </button>
+                <button type="button" name="forward" class="forward">Forward</button>
+                <button type="submit" name="process" class="submit" id="submit_button" >Submit</button>
+              </div>
+              <!-- /bottom-wizard -->
+            </form>
           </div>
+          <!-- /Wizard container -->
         </div>
-
-
-
-
+      </div><!-- /Row -->
+    </div><!-- /Form_container -->
+  </div>
+  
+  
 
 
 
 <script>
-
-$(document).ready(function(){
-
-var current_fs, next_fs, previous_fs; //fieldsets
-var opacity;
-var current = 1;
-var steps = $("fieldset").length;
-
-setProgressBar(current);
-
-$(".next").click(function(){
-
-current_fs = $(this).parent();
-next_fs = $(this).parent().next();
-
-//Add Class Active
-$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-//show the next fieldset
-next_fs.show();
-//hide the current fieldset with style
-current_fs.animate({opacity: 0}, {
-step: function(now) {
-// for making fielset appear animation
-opacity = 1 - now;
-
-current_fs.css({
-'display': 'none',
-'position': 'relative'
-});
-next_fs.css({'opacity': opacity});
-},
-duration: 500
-});
-setProgressBar(++current);
-});
-
-$(".previous").click(function(){
-
-current_fs = $(this).parent();
-previous_fs = $(this).parent().prev();
-
-//Remove class active
-$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-//show the previous fieldset
-previous_fs.show();
-
-//hide the current fieldset with style
-current_fs.animate({opacity: 0}, {
-step: function(now) {
-// for making fielset appear animation
-opacity = 1 - now;
-
-current_fs.css({
-'display': 'none',
-'position': 'relative'
-});
-previous_fs.css({'opacity': opacity});
-},
-duration: 500
-});
-setProgressBar(--current);
-});
-
-function setProgressBar(curStep){
-var percent = parseFloat(100 / steps) * curStep;
-percent = percent.toFixed();
-$(".progress-bar")
-.css("width",percent+"%")
-}
-
-$(".submit").click(function(){
-return false;
-})
-
-});
-
 
 $("#users_template").click(function() {
     window.open('/assets/lite/downloads/employees.csv');
@@ -583,8 +471,8 @@ $("#warehouses_attach").click(function() {
 
 $("#submit_button").click(function() {
   edit_system_setup()
-});
 
+});
 
 
 </script>
@@ -592,6 +480,10 @@ $("#submit_button").click(function() {
 
 
         `)
+
+
+
+
 
 
   $("#annual_leave_type").val(r.message['annual_leave_type'])
@@ -639,6 +531,7 @@ if(r.message['no_warehouses']==1){
 
 
 
+
     }
   })
 
@@ -650,12 +543,10 @@ if(r.message['no_warehouses']==1){
 })
 
 
-if(window.location.hostname!='erptag.com'){
   $(window).on("load", get_customer_logo);
-}
+
 
 // $(window).on("hashchange", edit_system_setup);
-
 
 function edit_system_setup(){
 
@@ -705,6 +596,17 @@ function edit_system_setup(){
             }
         }
     })
+
+
+
+
+    // frappe.call({
+    //     method: "lite.erp_setup.doctype.system_setup.system_setup.setup_system",
+    //     callback: function(){
+    //     }
+    //   });
+
+
 
 }
 
