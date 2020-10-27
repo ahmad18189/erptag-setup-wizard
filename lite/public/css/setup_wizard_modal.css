@@ -11,7 +11,7 @@
 
 #setup_wizard_modal #heading {
     text-transform: uppercase;
-    color: #733789;
+    color: #291649;
     font-weight: normal
 }
 
@@ -42,7 +42,7 @@
 
 input[type="checkbox"]:checked:before{
     font-size: 17px!important;
-    color: #733789;
+    color: #291649;
 }
 
 input[type="checkbox"]:before{
@@ -70,13 +70,13 @@ input[type="checkbox"]:before{
     -moz-box-shadow: none ;
     -webkit-box-shadow: none ;
     box-shadow: none ;
-    border: 1px solid #733789;
+    border: 1px solid #291649;
     outline-width: 0
 }
 
 #setup_wizard_modal #msform .action-button {
     width: 100px;
-    background: #733789;
+    background: #291649;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -89,7 +89,7 @@ input[type="checkbox"]:before{
 
 #setup_wizard_modal #msform .action-button {
     width: 100px;
-    background: #733789;
+    background: #291649;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -131,14 +131,14 @@ input[type="checkbox"]:before{
 
 #setup_wizard_modal .fs-title {
     font-size: 25px;
-    color: #733789;
+    color: #291649;
     margin-bottom: 15px;
     font-weight: normal;
     text-align: left
 }
 
 #setup_wizard_modal .purple-text {
-    color: #733789;
+    color: #291649;
     font-weight: normal
 }
 
@@ -162,7 +162,7 @@ input[type="checkbox"]:before{
 }
 
 #setup_wizard_modal #progressbar .active {
-    color: #733789
+    color: #291649
 }
 
 #setup_wizard_modal #progressbar li {
@@ -231,7 +231,7 @@ input[type="checkbox"]:before{
 
 #setup_wizard_modal #progressbar li.active:before,
 #setup_wizard_modal #progressbar li.active:after {
-    background: #733789
+    background: #291649
 }
 
 #setup_wizard_modal .progress {
@@ -239,7 +239,7 @@ input[type="checkbox"]:before{
 }
 
 #setup_wizard_modal .progress-bar {
-    background-color: #733789
+    background-color: #291649
 }
 
 #setup_wizard_modal .fit-image {
