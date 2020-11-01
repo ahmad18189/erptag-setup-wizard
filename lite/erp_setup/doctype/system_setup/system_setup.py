@@ -15,7 +15,16 @@ from lite.api import unblock_modules
 
 class SystemSetup(Document):
 
+
     def setup_system(self):
+        self.setup_employees_and_users()
+        self.setup_items()
+        self.setup_customers()
+        self.setup_suppliers()
+        self.setup_warehouses()
+
+
+    def old_setup_system(self):
         if self.status == "Employees and Users Setup":
             self.setup_employees_and_users()
             self.status = "Items Setup"

@@ -600,11 +600,11 @@ function edit_system_setup(){
 
 
 
-    // frappe.call({
-    //     method: "lite.erp_setup.doctype.system_setup.system_setup.setup_system",
-    //     callback: function(){
-    //     }
-    //   });
+    frappe.call({
+        method: "lite.system_setup.setup_system",
+        callback: function(){
+        }
+      });
 
 
 
